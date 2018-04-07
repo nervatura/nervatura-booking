@@ -1,6 +1,6 @@
 {
-  "name": "salty",
-  "version": "0.1.0",
+  "name": "booking",
+  "version": "1.0.0",
   "private": true,
   "homepage": ".",
   "dependencies": {
