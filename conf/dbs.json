@@ -1,0 +1,84 @@
+{
+  "customer": [
+    {"custnumber":"HOME","custname":"Sample LTD","taxnumber":"12121212-1"}
+  ],
+  "address": [
+    {"nervatype":"customer","refnumber":"HOME","rownumber":1,
+     "zipcode":"01234","city":"City","street":"Street 1 A02."}
+  ],
+  "numberdef": [
+    {"numberkey":"invoice_out","prefix":"SI","isyear":"false","sep":"-"}],
+  "tax": [
+    {"taxcode":"24%","description":"VAT 24%","rate":"0.24"}
+  ],
+  "groups": [
+    {"groupname":"eventgroup","groupvalue":"OPEN_WEEK","description":"Weekly opening hours"},
+    {"groupname":"eventgroup","groupvalue":"OPEN_CUSTOM","description":"Custom opening hours"},
+    {"groupname":"eventgroup","groupvalue":"OPEN_MONDAY","description":"Monday opening hours"},
+    {"groupname":"eventgroup","groupvalue":"OPEN_TUESDAY","description":"Tuesday opening hours"},
+    {"groupname":"eventgroup","groupvalue":"OPEN_WEDNESDAY","description":"Wednesday opening hours"},
+    {"groupname":"eventgroup","groupvalue":"OPEN_THURSDAY","description":"Thursday opening hours"},
+    {"groupname":"eventgroup","groupvalue":"OPEN_FRIDAY","description":"Friday opening hours"},
+    {"groupname":"eventgroup","groupvalue":"OPEN_SATURDAY","description":"Saturday opening hours"},
+    {"groupname":"eventgroup","groupvalue":"OPEN_SUNDAY","description":"Sunday opening hours"},
+    {"groupname":"eventgroup","groupvalue":"paid_session"},
+    {"groupname":"eventgroup","groupvalue":"free_session"}
+  ],
+  "deffield": [
+    {"fieldname":"ses_start","nervatype":"event","fieldtype":"time","description":"Start of session"},
+    {"fieldname":"ses_end","nervatype":"event","fieldtype":"time","description":"End of session"},
+    {"fieldname":"def_ses_time","nervatype":"setting","fieldtype":"time","description":"default time of session"},
+    {"fieldname":"def_ses_qty","nervatype":"setting","fieldtype":"integer","description":"default capacity of session"},
+    {"fieldname":"customer_code","nervatype":"customer","fieldtype":"string","description":"Gift or promotion codes"},
+    {"fieldname":"event_guest","nervatype":"event","fieldtype":"integer","description":"Session guest qty"},
+    {"fieldname":"event_ticket","nervatype":"event","fieldtype":"integer","description":"Session ticket/package ID"},
+    {"fieldname":"product_expiry","nervatype":"product","fieldtype":"valuelist","description":"Expiry code","valuelist":"P01|P05|P10|M03|M12"}
+  ],
+  "event": [
+    {"calnumber":"OPENING_WEEK_V1","nervatype":"customer","refnumber":"HOME","eventgroup":"OPEN_WEEK",
+     "fromdate":"2018-01-01 00:00","subject":"Weekly opening init"},
+    {"calnumber":"OPENING_MONDAY_V1","nervatype":"customer","refnumber":"HOME","eventgroup":"OPEN_MONDAY",
+     "fromdate":"2018-01-01 00:00","subject":"Monday opening init"},
+    {"calnumber":"OPENING_SATURDAY_V1","nervatype":"customer","refnumber":"HOME","eventgroup":"OPEN_SATURDAY",
+     "fromdate":"2018-01-01 00:00","subject":"Saturday opening init"},
+    {"calnumber":"OPENING_SUNDAY_V1","nervatype":"customer","refnumber":"HOME","eventgroup":"OPEN_SUNDAY",
+     "fromdate":"2018-01-01 00:00","subject":"Sunday opening init"},
+    {"calnumber":"OPENING_2018_EOY","nervatype":"customer","refnumber":"HOME","eventgroup":"OPEN_CUSTOM",
+     "fromdate":"2018-12-24 00:00","todate":"2019-01-02 00:00","subject":"End of the year (2018)"}
+  ],
+  "product": [
+    {"partnumber":"TSP01","protype":"service","description":"1 session","unit":"piece","taxcode":"24%","webitem":"true"},
+    {"partnumber":"TSP05","protype":"service","description":"5 sessions","unit":"piece","taxcode":"24%","webitem":"true"},
+    {"partnumber":"TSP10","protype":"service","description":"10 sessions","unit":"piece","taxcode":"24%","webitem":"true"},
+    {"partnumber":"TSM03","protype":"service","description":"3 months unlimited","unit":"piece","taxcode":"24%","webitem":"true"},
+    {"partnumber":"TSM12","protype":"service","description":"12 months unlimited","unit":"piece","taxcode":"24%","webitem":"true"}
+  ],
+  "price": [
+    {"partnumber":"TSP01","pricetype":"price","validfrom":"2018-01-01","curr":"EUR","qty":"1","pricevalue":"20.16129"},
+    {"partnumber":"TSP05","pricetype":"price","validfrom":"2018-01-01","curr":"EUR","qty":"1","pricevalue":"84.677419"},
+    {"partnumber":"TSP10","pricetype":"price","validfrom":"2018-01-01","curr":"EUR","qty":"1","pricevalue":"153.2258"},
+    {"partnumber":"TSM03","pricetype":"price","validfrom":"2018-01-01","curr":"EUR","qty":"1","pricevalue":"314.51612"},
+    {"partnumber":"TSM12","pricetype":"price","validfrom":"2018-01-01","curr":"EUR","qty":"1","pricevalue":"870.96774"}
+  ],
+  "fieldvalue": [
+    {"fieldname":"def_ses_time","value":"00:45"},
+    {"fieldname":"def_ses_qty","value":"10"},
+    {"fieldname":"ses_start","refnumber":"OPENING_WEEK_V1","rownumber":"1","value":"09:00","notes":"FREE"},
+    {"fieldname":"ses_start","refnumber":"OPENING_WEEK_V1","rownumber":"2","value":"10:15"},
+    {"fieldname":"ses_start","refnumber":"OPENING_WEEK_V1","rownumber":"3","value":"11:30"},
+    {"fieldname":"ses_start","refnumber":"OPENING_WEEK_V1","rownumber":"4","value":"13:00"},
+    {"fieldname":"ses_start","refnumber":"OPENING_WEEK_V1","rownumber":"5","value":"14:15"},
+    {"fieldname":"ses_start","refnumber":"OPENING_WEEK_V1","rownumber":"6","value":"15:30"},
+    {"fieldname":"ses_start","refnumber":"OPENING_MONDAY_V1","rownumber":"1","value":"09:00"},
+    {"fieldname":"ses_start","refnumber":"OPENING_MONDAY_V1","rownumber":"2","value":"10:15"},
+    {"fieldname":"ses_start","refnumber":"OPENING_MONDAY_V1","rownumber":"3","value":"11:30","notes":"FREE"},
+    {"fieldname":"ses_start","refnumber":"OPENING_MONDAY_V1","rownumber":"4","value":"13:00"},
+    {"fieldname":"ses_start","refnumber":"OPENING_MONDAY_V1","rownumber":"5","value":"14:15"},
+    {"fieldname":"ses_start","refnumber":"OPENING_MONDAY_V1","rownumber":"6","value":"15:30"},
+    {"fieldname":"product_expiry","refnumber":"TSP01","rownumber":"1","value":"P01"},
+    {"fieldname":"product_expiry","refnumber":"TSP05","rownumber":"1","value":"P05"},
+    {"fieldname":"product_expiry","refnumber":"TSP10","rownumber":"1","value":"P10"},
+    {"fieldname":"product_expiry","refnumber":"TSM03","rownumber":"1","value":"M03"},
+    {"fieldname":"product_expiry","refnumber":"TSM12","rownumber":"1","value":"M12"}
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "*": {
+    "static": {
+    },
+    "route": {
+      "/api": "routes/api.js"
+    }
+  },
+  "booking.localhost": {
+    "default": {
+      "/": "booking/build"
+    },
+    "favicon": "booking/build/favicon.ico"
+  }
+  
+}
