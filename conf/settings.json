@@ -1,0 +1,104 @@
+{
+  "APP_LANG": "en",
+  "START_PAGE": "static",
+  
+  "DATA_DIR": "data",
+  "PYTHON2_PATH": "python",
+  "DATA_STORE": "lokijs",
+
+  "CLIENT_CERT_URL": "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com",
+  "CLIENT_SETTINGS": {
+    "currency": "EUR",
+    "country": "FI",
+    "booking_day_limit": 30,
+    "page_orientation": "p",
+    "reportkey": {"en": "ntr_invoice_en"},
+    "database": "demo",
+    "mail_from": "info@nervatura.com",
+    "discount_qty_limit": 2,
+    "discount_qty_value": 10,
+    "google_analytics": "",
+    "firebase": {
+      "apiKey": "AIzaSyAj-DZck7Z6_ktZlEx0q-2X8AoiamTz9CY",
+      "authDomain": "saltyfun-31ea7.firebaseapp.com",
+      "databaseURL": "https://saltyfun-31ea7.firebaseio.com",
+      "projectId": "saltyfun-31ea7",
+      "storageBucket": "saltyfun-31ea7.appspot.com",
+      "messagingSenderId": "962731441653"
+    }
+  },
+  "PAYMENT": {
+    "MERCHANT": {
+      "id": "13466", 
+      "secret": "6pKF4jkv97zmqBJ3ZL8gUw5DfT2NMQ" },
+    "DATABASE": "demo",
+    "SERVICE": { 
+      "host": "payment.paytrail.com", 
+      "path": "/api-payment/create" },
+    "HEADERS": [{
+      "name" : "X-Verkkomaksut-Api-Version", 
+      "value": "1" }],
+    "RESPONSE": { 
+      "host": "http://127.0.0.1:8080", 
+      "success": "http://localhost:3000/#/booking/payment",
+      "failure": "http://localhost:3000/#/booking"
+    },
+    "METHOD": {
+      "0": { "name":  "Unknown", "type": "card" },
+      "1": { "name":  "Nordea", "type": "bank" },
+      "2": { "name":  "Osuuspankki", "type": "bank" },
+      "3": { "name":  "Danske Bank", "type": "bank" },
+      "5": { "name":  "Ålandsbanken", "type": "bank" },
+      "6": { "name":  "Handelsbanken", "type": "bank" },
+      "9": { "name":  "PayPal", "type": "card" },
+      "10": { "name":  "S-Pankki", "type": "bank" },
+      "11": { "name":  "Klarna Invoice", "type": "invoice" },
+      "12": { "name":  "Klarna Installment", "type": "invoice" },
+      "18": { "name":  "Jousto", "type": "invoice" },
+      "30": { "name":  "Visa", "type": "card" },
+      "31": { "name":  "MasterCard", "type": "card" },
+      "34": { "name":  "Diners Club", "type": "card" },
+      "35": { "name":  "JCB", "type": "card" },
+      "36": { "name":  "Paytrail account", "type": "card" },
+      "50": { "name":  "Aktia", "type": "bank" },
+      "51": { "name":  "POP Pankki", "type": "bank" },
+      "52": { "name":  "Säästöpankki", "type": "bank" },
+      "53": { "name":  "Visa (Nets)", "type": "card" },
+      "54": { "name":  "MasterCard (Nets)", "type": "card" },
+      "55": { "name":  "Diners Club (Nets)", "type": "card" },
+      "56": { "name":  "American Express (Nets)", "type": "card" },
+      "58": { "name":  "MobilePay", "type": "card" },
+      "60": { "name":  "Collector Bank", "type": "invoice" },
+      "61": { "name":  "Oma Säästöpankki", "type": "bank" }
+    }
+  },
+
+  "LONG_TIMEOUT": 240000,  
+  "SESSION_SECRET": "auto",
+  "COOKIE_MAX_AGE": 604800000,
+  "CONTENT_LENGTH": 20000,
+
+  "ALL_HOST_RESTRICTION": "",
+  "NAS_HOST_RESTRICTION": "",
+  "NPI_HOST_RESTRICTION": "",
+  "NDI_HOST_RESTRICTION": "",
+  
+  "NAS_AUTH": "local",
+  "AMAZON_CLIENT_ID": null,
+  "AMAZON_CLIENT_SECRET": null,
+  "AZURE_CLIENT_ID": null,
+  "AZURE_CLIENT_SECRET": null,
+  "AZURE_REDIRECT_URL": null,
+  "AZURE_IDENTITY_URL": null,
+  "GOOGLE_CLIENT_ID": null,
+  "GOOGLE_CLIENT_SECRET": null,
+
+  "SMTP_HOST": "",
+  "SMTP_PORT": 465,
+  "SMTP_SECURE": true,
+  "SMTP_USER": "",
+  "SMTP_PASSWORD": "",
+
+  "MJ_APIKEY_PUBLIC": null,
+  "MJ_APIKEY_PRIVATE": null
+}
