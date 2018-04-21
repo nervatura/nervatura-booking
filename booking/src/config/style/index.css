@@ -61,20 +61,6 @@ label {
   margin-right: 0px;
 }
 
-.mdl-button {
-  border-radius: 20px!important;
-  font-family: 'NeoSansStd'!important;
-  font-size: 16px!important;
-}
-
-.firebaseui-idp-password, .firebaseui-idp-password:hover, .mdl-button.firebaseui-idp-password:active, .mdl-button.firebaseui-idp-password:focus {
-  background-color: #CDB3A3!important;
-}
-
-.firebaseui-idp-phone, .firebaseui-idp-phone:hover, .mdl-button.firebaseui-idp-phone:active, .mdl-button.firebaseui-idp-phone:focus {
-  background-color: #908585!important;
-}
-
 input {
   padding: 4px!important;
 }

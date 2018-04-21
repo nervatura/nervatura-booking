@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import MsgBox from './MsgBox';
+import LoginBox from './LoginBox';
 import SpinnerBox from './SpinnerBox';
 
 class ModalBox extends Component {
@@ -15,6 +16,8 @@ class ModalBox extends Component {
       switch (modal.type) {
         case "msg":
           return <MsgBox />;
+        case "login":
+          return <LoginBox />;
         default:
           return null; }
     }

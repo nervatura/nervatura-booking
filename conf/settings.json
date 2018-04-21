@@ -11,6 +11,7 @@
   "CLIENT_SETTINGS": {
     "currency": "EUR",
     "country": "FI",
+    "country_code": [{"key":"fi", "code":"+358"}],
     "booking_day_limit": 30,
     "page_orientation": "p",
     "reportkey": {"en": "ntr_invoice_en"},

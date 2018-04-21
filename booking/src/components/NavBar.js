@@ -71,7 +71,7 @@ class NavBar extends Component {
         return (
           <Link replace to="/booking" 
             className="font-bold w3-bar-item w3-button w3-right"
-            onClick={() => { setMenu(null) }}>
+            onClick={() => { setMenu(null); dispatch(setPageView({ view:"booking" })); }}>
             <i className="fa fa-calendar-check-o" aria-hidden="true"></i> {getLang('menu_book_now')}</Link>); 
       }
     }

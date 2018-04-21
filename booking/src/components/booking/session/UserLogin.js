@@ -1,40 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase';
-import firebaseui from 'firebaseui';
 
 class UserLogin extends Component {
-  constructor(props) {
-    super(props);
-    
-    const { country } = this.props.data.store.server.settings
-    this.state = {
-      uiConfig: {
-        credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
-        signInOptions: [
-          {
-            provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-            requireDisplayName: false
-          },
-          {
-            provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-            recaptchaParameters: {
-              type: 'image', // 'audio'
-              size: 'normal', // 'invisible' or 'compact'
-              badge: 'bottomleft' //' bottomright' or 'inline' applies to invisible.
-            },
-            defaultCountry: country
-          }
-        ]
-      }
-    };
-  }
-  
   render() {
     const { dispatch } = this.props
-    const { getText } = this.props.data.actions.app
+    const { getText, appData } = this.props.data.actions.app
+    const { country, country_code } = this.props.data.store.server.settings
     return (
       <div id="login">
         <div className="w3-cell-row w3-bottombar" >
@@ -49,20 +22,73 @@ class UserLogin extends Component {
               var provider = new firebase.auth.GoogleAuthProvider();
               firebase.auth().signInWithRedirect(provider);
               localStorage.setItem("redirect", "1"); }}>
-            <i className="fa fa-google fa-fw" aria-hidden="true"></i>&nbsp;
-            <span className="font-bold">{dispatch(getText('booking_login_sign_in'))} Google</span></a>
+            <div className="w3-cell-row" >
+              <div className="w3-cell w3-cell-middle" >
+                <i className="fa fa-google fa-2x" aria-hidden="true"></i>
+              </div>
+              <div className="w3-cell w3-cell-middle" style={{paddingLeft:6}} >
+                <span className="font-bold">{dispatch(getText('booking_login_sign_in_google'))}</span>
+              </div>
+            </div>
+          </a>
         </div>
-        <div className="w3-center" >
+        <div className="w3-center w3-margin-bottom" >
           <a className="w3-button w3-text-white w3-border w3-round-xxlarge" 
             style={{backgroundColor:"#3b5998", width:220}} 
             onClick={ (event) => {
               var provider = new firebase.auth.FacebookAuthProvider();
               firebase.auth().signInWithRedirect(provider);
               localStorage.setItem("redirect", "1"); }}>
-            <i className="fa fa-facebook-official fa-fw" aria-hidden="true"></i>&nbsp;
-            <span className="font-bold">{dispatch(getText('booking_login_sign_in'))} Facebook</span></a>
+            <div className="w3-cell-row" >
+              <div className="w3-cell w3-cell-middle" >
+                <i className="fa fa-facebook-official fa-2x" aria-hidden="true"></i>
+              </div>
+              <div className="w3-cell w3-cell-middle" style={{paddingLeft:6}} >
+                <span className="font-bold">{dispatch(getText('booking_login_sign_in_facebook'))}</span>
+              </div>
+            </div>
+          </a>
         </div>
-        <StyledFirebaseAuth uiConfig={this.state.uiConfig} firebaseAuth={firebase.auth()}/>
+        <div className="w3-center w3-margin-bottom" >
+          <a className="w3-button w3-text-white w3-border w3-round-xxlarge" 
+            style={{backgroundColor:"#CDB3A3", width:220}} 
+            onClick={ (event) => {
+               dispatch(appData("modal", {
+                type: "login", login_type: "email", login_state: "email_check",
+                login_email: localStorage.getItem("last_email") || ""
+              }))
+            }}>
+            <div className="w3-cell-row" >
+              <div className="w3-cell w3-cell-middle" >
+                <i className="fa fa-envelope fa-2x" aria-hidden="true"></i>
+              </div>
+              <div className="w3-cell w3-cell-middle" style={{paddingLeft:6}} >
+                <span className="font-bold">{dispatch(getText('booking_login_sign_in_email'))}</span>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div className="w3-center" >
+          <a className="w3-button w3-text-white w3-border w3-round-xxlarge" 
+            style={{backgroundColor:"#908585", width:220}} 
+            onClick={ (event) => {
+              const ccode = country_code.filter(function(row){
+                return (row.key === String(country).toLowerCase());})[0];
+              dispatch(appData("modal", {
+                type: "login", login_type: "phone", login_state: "phone_login",
+                country_code: ccode.code, login_phone: localStorage.getItem("last_phone") || ""
+              }))
+            }}>
+            <div className="w3-cell-row" >
+              <div className="w3-cell w3-cell-middle" >
+                <i className="fa fa-phone fa-2x" aria-hidden="true"></i>
+              </div>
+              <div className="w3-cell w3-cell-middle" style={{paddingLeft:6}} >
+                <span className="font-bold">{dispatch(getText('booking_login_sign_in_phone'))}</span>
+              </div>
+            </div>
+          </a>
+        </div>
       </div>
     );
   }

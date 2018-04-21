@@ -51,9 +51,9 @@ class MsgBox extends Component {
                   return(
                     <div className="w3-row w3-center">
                       <button autoFocus={true} 
-                        className="w3-button w3-white w3-border" 
+                        className="w3-button w3-white w3-border font-bold" 
                         onClick={() => { dispatch(appData("modal", { type: "" })); }}>
-                        <i className="fa fa-check fa-fw" aria-hidden="true"></i><b>{dispatch(getText("msg_ok"))}</b></button>
+                        <i className="fa fa-check fa-fw" aria-hidden="true"></i>{dispatch(getText("msg_ok"))}</button>
                     </div>)}
               })()}
             </div>

@@ -43,7 +43,7 @@ export const conf = {
     price: []
   },
   booking: {
-    view: "search",
+    view: "customer",
     login: {
       current: {},
       data: {},

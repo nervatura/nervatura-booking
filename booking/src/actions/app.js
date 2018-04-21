@@ -237,6 +237,12 @@ export const setPageView = (params) => {
     }
 
     switch (params.view) {
+      case "booking":
+        get_login_view();
+        if(booking.view === "login"){
+          booking.view = "search"; }
+        break;
+        
       case "login":
         get_login_view();
         break;

@@ -248,16 +248,172 @@ export const initAuth = () => {
 
 export const sendVerification = () => {
   return (dispatch, getState) => {
-    const { showMessage, getText } = getState().actions.app;
+    const { showMessage, getText, appState } = getState().actions.app;
     const { lang } = getState().store.state
     
     firebase.auth().languageCode = lang;
+    dispatch(appState("request_sending", true))
     firebase.auth().currentUser.sendEmailVerification().then(function() {
+      dispatch(appState("request_sending", false));
       dispatch(showMessage({ value: dispatch(getText('booking_verification_ok')) }));
     }).catch(function(err) {
+      dispatch(appState("request_sending", false));
       if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
         dispatch(showMessage({ value: err })); }
     });
+  }
+}
+
+export const resetPassword = () => {
+  return (dispatch, getState) => {
+    const { showMessage, appData, appState } = getState().actions.app;
+    const { login_email } = getState().store.modal;
+    const { lang } = getState().store.state
+    
+    firebase.auth().languageCode = lang;
+    dispatch(appState("request_sending", true));
+    firebase.auth().sendPasswordResetEmail(login_email).then(function() {
+      dispatch(appState("request_sending", false));
+      dispatch(appData("modal", { type: "" }));
+    }).catch(function(err) {
+      dispatch(appState("request_sending", false));
+      if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+        dispatch(showMessage({ value: err })); }
+    });
+  }
+}
+
+export const emailCreate = () => {
+  return (dispatch, getState) => {
+    const { appData, appState } = getState().actions.app;
+    const { lang } = getState().store.state
+    let modal = getState().store.modal;
+    modal.errorMessage = ""
+    if(modal.validationMessage && modal.validationMessage !== ""){
+      modal.errorMessage = modal.validationMessage;
+      dispatch(appData("modal", modal)); }
+    else {
+      firebase.auth().languageCode = lang;
+      dispatch(appState("request_sending", true));
+      firebase.auth().createUserAndRetrieveDataWithEmailAndPassword(modal.login_email, modal.login_password || "").then(function() {
+        dispatch(appState("request_sending", false));
+        localStorage.setItem("last_email", modal.login_email);
+        dispatch(appData("modal", { type: "" }));
+      }).catch(function(error) {
+        dispatch(appState("request_sending", false));
+        modal.errorMessage = error.message; 
+        dispatch(appData("modal", modal)); 
+      });
+    }
+  }
+}
+
+export const emailLogin = () => {
+  return (dispatch, getState) => {
+    const { appData, appState } = getState().actions.app;
+    const { lang } = getState().store.state
+    let modal = getState().store.modal;
+    modal.errorMessage = ""
+    if(modal.validationMessage && modal.validationMessage !== ""){
+      modal.errorMessage = modal.validationMessage;
+      dispatch(appData("modal", modal)); }
+    else {
+      firebase.auth().languageCode = lang;
+      dispatch(appState("request_sending", true));
+      firebase.auth().signInAndRetrieveDataWithEmailAndPassword(modal.login_email, modal.login_password || "email_check").then(function() {
+        dispatch(appState("request_sending", false));
+        if(modal.login_state === "email_check"){
+          modal.login_state = "email_login";
+          dispatch(appData("modal", modal)); }
+        else {
+          localStorage.setItem("last_email", modal.login_email);
+          dispatch(appData("modal", { type: "" }));}
+      }).catch(function(error) {
+        dispatch(appState("request_sending", false));
+        if (error.code === 'auth/user-not-found') {
+          modal.login_state = "email_create"; }
+        else if ((modal.login_state === "email_check") && (error.code === 'auth/wrong-password')) {
+          modal.login_state = "email_login";
+        } else {
+          modal.errorMessage = error.message; }
+        dispatch(appData("modal", modal)); 
+      });
+    }
+  }
+}
+
+export const phoneLogin = () => {
+  const resetReCaptcha = () => {
+    if (typeof grecaptcha !== 'undefined' && typeof window.recaptchaWidgetId !== 'undefined') {
+      window.grecaptcha.reset(window.recaptchaWidgetId); }}
+
+  return (dispatch, getState) => {
+    const { appData, getText } = getState().actions.app;
+    const { lang } = getState().store.state
+    let modal = getState().store.modal;
+    modal.errorMessage = ""
+    if((modal.country_code === "") || (modal.login_phone === "") || 
+      (!modal.login_phone) || (String(modal.login_phone).length<=4)){
+      modal.errorMessage = dispatch(getText('booking_login_phone_number_err'));
+      dispatch(appData("modal", modal));
+      resetReCaptcha(); }
+    else {
+      firebase.auth().languageCode = lang;
+      modal.phone_number = modal.country_code+modal.login_phone;
+      const appVerifier = window.recaptchaVerifier;
+      firebase.auth().signInWithPhoneNumber(modal.phone_number, appVerifier).then(function(confirmationResult) {
+        localStorage.setItem("last_phone", modal.login_phone);
+        modal.login_state = "phone_verify";
+        window.confirmationResult = confirmationResult;
+        dispatch(appData("modal", modal));
+      }).catch(function(error) {
+        switch (error.code) {
+          case "auth/invalid-phone-number":
+          case "auth/missing-phone-number":
+            modal.errorMessage = dispatch(getText('booking_login_phone_number_err'));
+            resetReCaptcha();
+            break;
+          
+          case "auth/quota-exceeded":
+          case "auth/user-disabled":
+          case "auth/operation-not-allowed":
+            window.recaptchaVerifier = null;
+            window.recaptchaWidgetId = null;
+            break;
+        
+          case "auth/captcha-check-failed":
+          default:
+            modal.errorMessage = error.message;
+            resetReCaptcha();
+            break;
+        }
+        dispatch(appData("modal", modal));
+      });
+    }
+  }
+}
+
+export const phoneVerify = () => {
+  return (dispatch, getState) => {
+    const { appData, getText, appState } = getState().actions.app;
+    const { lang } = getState().store.state
+    let modal = getState().store.modal;
+    modal.errorMessage = ""
+    if(String(modal.login_code).length !== 6){
+      modal.errorMessage = dispatch(getText('booking_login_phone_number_err'));
+      dispatch(appData("modal", modal)); }
+    else {
+      firebase.auth().languageCode = lang;
+      dispatch(appState("request_sending", true));
+      window.confirmationResult.confirm(modal.login_code).then(function (result) {
+        dispatch(appState("request_sending", false));
+        dispatch(appData("modal", { type: "" }));
+      }).catch(function (error) {
+        dispatch(appState("request_sending", false));
+        modal.errorMessage = error.message;
+        dispatch(appData("modal", modal));
+      });
+    }
   }
 }
 
