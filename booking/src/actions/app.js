@@ -183,7 +183,6 @@ export const initEvent = (booking, edate, session, event) => {
     })
   }
   else {
-    
     booking.login.current.fieldvalue = [
       {
         id: null, fieldname: "event_guest", ref_id: null,
@@ -191,6 +190,17 @@ export const initEvent = (booking, edate, session, event) => {
         notes: null, deleted: 0
       }
     ]
+  }
+  booking.login.current.edate_packages = [];
+  if (!event) {
+    booking.login.data.event.forEach(event => {
+      if(moment(event.fromdate,'YYYY-MM-DD HH:mm').format('YYYY-MM-DD') === edate){
+        const event_ticket = booking.login.data.fieldvalue.filter(function (row) {
+          return ((row.fieldname === "event_ticket") &&
+            (row.deleted === 0) && (row.ref_id === event.id));})[0]
+        booking.login.data.packages.forEach(pack => {
+          if((pack.expiration) && (pack.pkey === parseInt(event_ticket.value,10))){
+            booking.login.current.edate_packages.push(pack.pkey); }}); }});  
   }
   return booking;
 }

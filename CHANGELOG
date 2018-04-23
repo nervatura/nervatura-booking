@@ -1,3 +1,6 @@
+## 1.1.1
+- some bug fixes
+
 ## 1.1.0
 - React client: remove firebaseui (react-firebaseui => firebase)
 

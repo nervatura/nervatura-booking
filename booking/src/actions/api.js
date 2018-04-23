@@ -162,9 +162,12 @@ export const saveData = (view) => {
             dispatch(getData(null, null, (err, data) => {
               if(err) { dispatch(showMessage({ value: err })); }
               else {
-                if(view === "event"){
-                  if(booking.login.current.event.id === null) {
-                    dispatch(sendMail()); }}
+                if((view === "event") || (view === "history")){
+                  if(view === "event"){
+                    if(booking.login.current.event.id === null) {
+                      dispatch(sendMail()); }}
+                  if(booking.search.result.length > 0){
+                    dispatch(getDays()); }}
                 booking.login.data = data;
                 booking.login.current = result;
                 booking.login.data.dirty = false;

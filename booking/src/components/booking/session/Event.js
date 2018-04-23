@@ -5,9 +5,9 @@ import moment from 'moment';
 class Event extends Component {
   render() {
     const { dispatch } = this.props
-    const { getText, pageEdit, validValue, addFieldItem, removeFieldItem, setPageView, cancelData } = this.props.data.actions.app
+    const { getText, pageEdit, validValue, addFieldItem, removeFieldItem, setPageView, cancelData, deleteEvent } = this.props.data.actions.app
     const { onNumberInput, onValueChange } = this.props.data.actions.tool
-    const { event, fieldvalue, session } = this.props.data.store.booking.login.current
+    const { event, fieldvalue, session, edate_packages } = this.props.data.store.booking.login.current
     const { data } = this.props.data.store.booking.login
     const { eventgroup_free_session } = this.props.data.store.booking.login.data.defvalues
     const event_guest = fieldvalue.filter(function(row){
@@ -17,6 +17,7 @@ class Event extends Component {
     const current_pkey = current_packages.map((row, index) => { return parseInt(row.value, 10); });
     let valid_packages = data.packages.filter(function(row){
       return ((row.valid === true) && (current_pkey.indexOf(row.pkey) === -1) && 
+        (edate_packages.indexOf(row.pkey) === -1) && 
         ((!row.expiration) ? true :
         moment(row.expiration, 'YYYY-MM-DD').isSameOrAfter(moment(event.fromdate,'YYYY-MM-DD HH:mm'))));})
     valid_packages.unshift("");
@@ -31,6 +32,14 @@ class Event extends Component {
             <a className="w3-button w3-right w3-hover-text-red" 
               onClick={ (event) => dispatch(cancelData())  }>
               <i className="fa fa-times-circle fa-fw" aria-hidden="true"></i></a>
+            {(() => {
+              if(event.id !== null){
+                return <a className="w3-button w3-right w3-hover-text-red" 
+                  onClick={ (e) => { 
+                    dispatch(setPageView({ view:"history" }));
+                    dispatch(deleteEvent(event)); } }>
+                  <i className="fa fa-trash fa-fw" aria-hidden="true" /></a> }
+            })()}
           </div>
         </div>
         <ul className="w3-ul w3-white">
@@ -100,7 +109,14 @@ class Event extends Component {
                   </div>
                 </li>)
             }
-            else if((valid_packages.length === 1) && (current_packages.length > 0)){
+            else if(((valid_packages.length === 1) && (current_packages.length > 0)) || (event.id !== null)){
+              const cmd_del = (index) => {
+                if(event.id === null)  
+                  return <span className="w3-hover-text-red"
+                    onClick={ () => dispatch(removeFieldItem("event_ticket", index)) } style={{cursor: 'pointer'}}><i 
+                    className="fa fa-times-circle fa-fw" aria-hidden="true"></i></span>
+                else
+                  return null; }
               return(
                 <li className="w3-cell-row padding-0 " >
                   <div className="w3-cell w3-padding w3-left">
@@ -109,9 +125,7 @@ class Event extends Component {
                   <div className="w3-cell w3-left">
                     {current_packages.map((row, index) =>
                       <div className="w3-cell w3-padding w3-left w3-text-grey" key={index}>
-                        <span className="w3-hover-text-red"
-                          onClick={ () => dispatch(removeFieldItem("event_ticket", index)) } style={{cursor: 'pointer'}}><i 
-                            className="fa fa-times-circle fa-fw" aria-hidden="true"></i></span>&nbsp;{row.notes}
+                        {cmd_del(index)}&nbsp;{row.notes}
                       </div>
                     )}
                   </div>
