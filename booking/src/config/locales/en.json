@@ -76,6 +76,8 @@
   "booking_login_sign_in_facebook": "Sign in with Facebook",
   "booking_login_sign_in_email": "Sign in with email",
   "booking_login_sign_in_phone": "Sign in with phone",
+  "booking_login_invalid_provider": "The selected credential for the authentication provider is not supported!",
+  "booking_login_continue_with": "Continue with",
   "booking_login_create_account": "Create account",
   "booking_login_email": "Email",
   "booking_login_password": "Password",
@@ -98,6 +100,7 @@
   "booking_login_sign": "SIGN IN",
   "booking_login_send": "SEND",
   "booking_login_back": "BACK",
+  "booking_login_disabled": "The user account has been disabled by an administrator.",
 
   "booking_registration_title": "Customer Registration Form",
   "booking_customer_title": "Customer Data",

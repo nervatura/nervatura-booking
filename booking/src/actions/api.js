@@ -51,6 +51,18 @@ const initData = (id, method) => {
   return {"id":id, "method":method, "params":{}, "jsonrpc":"2.0"};
 }
 
+export const signOut = () => {
+  return (dispatch, getState) => {
+    const { appData } = getState().actions.app;
+    let booking = getState().store.booking;
+    firebase.auth().signOut().then(function() {
+      booking.login = { data:{}, current:{} };
+      booking.view = "search";
+      dispatch(appData("booking", booking));
+    }).catch(function(error) {});
+  }
+}
+
 export const getSettings = (callback) => {
   return (dispatch, getState) => {
     const { appData } = getState().actions.app;
@@ -85,7 +97,7 @@ export const getDays = () => {
 
 export const getData = (view, user, callback) => {
   return (dispatch, getState) => {
-    const { appData, showMessage, setPageView } = getState().actions.app;
+    const { appData, showMessage, setPageView, getText } = getState().actions.app;
     const { database } = getState().store.server.settings;
     let booking = getState().store.booking;
     
@@ -101,16 +113,27 @@ export const getData = (view, user, callback) => {
         user.getIdToken(true).then(function(idToken) {
           let data = initData(3, "getData");
           data.params = {alias: database, idToken: idToken};
-          return dispatch(fetchData({data, callback: (err, result)=>{
-            if(callback){
-              callback(err, result);}
+          const disabledUser = (result) => {
+            if(result.customer){
+              return (result.customer.inactive === 1) ? true : false; }
             else {
-              if(!err){
-                booking.login.data = result;
-                dispatch(setPageView({ "view":view, "booking": booking })) 
-              }
-              else if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-                dispatch(showMessage({ value: err })); }}}}));
+              return false; }}
+          return dispatch(fetchData({data, callback: (err, result)=>{
+            if(!err && disabledUser(result)) {
+              dispatch(signOut());
+              dispatch(showMessage({ value: dispatch(getText('booking_login_disabled')) })); }
+            else {
+              if(callback){
+                callback(err, result);}
+              else {
+                if(!err){
+                  booking.login.data = result;
+                  dispatch(setPageView({ "view":view, "booking": booking })) 
+                }
+                else if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+                  dispatch(showMessage({ value: err })); }}
+            }}
+          }));
         }).catch(function(err) {
           if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
             dispatch(showMessage({ value: err })); }});}
@@ -313,7 +336,7 @@ export const emailCreate = () => {
 
 export const emailLogin = () => {
   return (dispatch, getState) => {
-    const { appData, appState } = getState().actions.app;
+    const { appData, appState, getText } = getState().actions.app;
     const { lang } = getState().store.state
     let modal = getState().store.modal;
     modal.errorMessage = ""
@@ -323,24 +346,43 @@ export const emailLogin = () => {
     else {
       firebase.auth().languageCode = lang;
       dispatch(appState("request_sending", true));
-      firebase.auth().signInAndRetrieveDataWithEmailAndPassword(modal.login_email, modal.login_password || "email_check").then(function() {
-        dispatch(appState("request_sending", false));
-        if(modal.login_state === "email_check"){
-          modal.login_state = "email_login";
-          dispatch(appData("modal", modal)); }
-        else {
+      
+      if(modal.login_state === "email_check"){
+        firebase.auth().fetchProvidersForEmail(modal.login_email).then(function(providers) {
+          dispatch(appState("request_sending", false));
+          if((providers.indexOf("google.com") > -1) || ((providers.length === 0)  && (modal.login_email.indexOf("gmail.com") > -1))){
+            modal.errorMessage = dispatch(getText('booking_login_invalid_provider'))+" "+
+            dispatch(getText('booking_login_continue_with'))+" "+
+            dispatch(getText('booking_login_sign_in_google')); }
+          else if(providers.indexOf("facebook.com") > -1){
+            modal.errorMessage = dispatch(getText('booking_login_invalid_provider'))+" "+
+              dispatch(getText('booking_login_continue_with'))+" "+
+              dispatch(getText('booking_login_sign_in_facebook')); }
+          else if(providers.length === 0){
+            modal.login_state = "email_create"; }
+          else if(providers.indexOf("password") > -1){
+            modal.login_state = "email_login"; }
+          else {
+            modal.errorMessage = dispatch(getText('booking_login_invalid_provider')) }
+          dispatch(appData("modal", modal));
+        }).catch(function(error) {
+          dispatch(appState("request_sending", false));
+          modal.errorMessage = error.message;
+          dispatch(appData("modal", modal)); 
+        });}
+      else {
+        firebase.auth().signInAndRetrieveDataWithEmailAndPassword(modal.login_email, modal.login_password || "email_check").then(function() {
+          dispatch(appState("request_sending", false));
           localStorage.setItem("last_email", modal.login_email);
-          dispatch(appData("modal", { type: "" }));}
-      }).catch(function(error) {
-        dispatch(appState("request_sending", false));
-        if (error.code === 'auth/user-not-found') {
-          modal.login_state = "email_create"; }
-        else if ((modal.login_state === "email_check") && (error.code === 'auth/wrong-password')) {
-          modal.login_state = "email_login";
-        } else {
-          modal.errorMessage = error.message; }
-        dispatch(appData("modal", modal)); 
-      });
+          dispatch(appData("modal", { type: "" }));
+        }).catch(function(error) {
+          dispatch(appState("request_sending", false));
+          if (error.code === 'auth/user-not-found') {
+            modal.login_state = "email_create"; } 
+          else {
+            modal.errorMessage = error.message; }
+          dispatch(appData("modal", modal)); 
+        });}
     }
   }
 }
@@ -417,17 +459,5 @@ export const phoneVerify = () => {
         dispatch(appData("modal", modal));
       });
     }
-  }
-}
-
-export const signOut = () => {
-  return (dispatch, getState) => {
-    const { appData } = getState().actions.app;
-    let booking = getState().store.booking;
-    firebase.auth().signOut().then(function() {
-      booking.login = { data:{}, current:{} };
-      booking.view = "search";
-      dispatch(appData("booking", booking));
-    }).catch(function(error) {});
   }
 }
