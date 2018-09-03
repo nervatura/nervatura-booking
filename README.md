@@ -11,12 +11,9 @@ Nervatura Sample Application
 
 ## Installation & Quick Start
 
-    $ git clone https://github.com/nervatura/nervatura-express.git nervatura
-    $ cd nervatura
+    $ git clone https://github.com/nervatura/nervatura-booking.git
+    $ cd nervatura-booking
     $ npm install
-    $ npm install --save moment moment-range
-    $ rm -r www
-    $ git clone https://github.com/nervatura/nervatura-booking.git www
 
 Create a Firebase project in the [Firebase console](https://console.firebase.google.com/). Click Add Firebase to your web app. Copy and paste the config values to the [conf/settings.json](https://github.com/nervatura/nervatura-booking/blob/master/conf/settings.json) file (firebase field).
 

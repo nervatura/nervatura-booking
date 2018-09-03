@@ -24,7 +24,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build && rm -rf ../www/booking && mv build ../www/booking",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },

@@ -981,7 +981,7 @@ function payment_results(nstore, params, _callback) {
 }
 
 function index(params, req, res) {
-  var sendResult = require('../../lib/ext/result.js').sendResult;
+  var sendResult = require('nervatura-express/lib/ext/result.js').sendResult;
   var resMethod;
   
   async.waterfall([

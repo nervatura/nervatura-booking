@@ -41,9 +41,9 @@
       "name" : "X-Verkkomaksut-Api-Version", 
       "value": "1" }],
     "RESPONSE": { 
-      "host": "http://127.0.0.1:8080", 
-      "success": "http://localhost:3000/#/booking/payment",
-      "failure": "http://localhost:3000/#/booking"
+      "host": "http://localhost:8080", 
+      "success": "http://localhost:8080/#/booking/payment",
+      "failure": "http://localhost:8080/#/booking"
     },
     "METHOD": {
       "0": { "name":  "Unknown", "type": "card" },

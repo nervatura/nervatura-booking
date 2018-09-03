@@ -8,9 +8,9 @@
   },
   "booking.localhost": {
     "default": {
-      "/": "booking/build"
+      "/": "booking"
     },
-    "favicon": "booking/build/favicon.ico"
+    "favicon": "booking/favicon.ico"
   }
   
 }
