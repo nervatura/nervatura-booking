@@ -60,3 +60,7 @@ typings/
 .settings
 .vscode
 .eslintrc.json
+
+data/data/*
+data/storage/*
+package-lock.json
