@@ -1,10 +1,14 @@
 {
   "*": {
     "static": {
-      "/": "booking"
     },
     "route": {
       "/api": "routes/api.js"
+    }
+  },
+  "booking.localhost": {
+    "default": {
+      "/": "booking"
     },
     "favicon": "booking/favicon.ico"
   }
